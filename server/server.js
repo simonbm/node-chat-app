@@ -31,22 +31,19 @@ app.use((req, res, next) => {
 io.on('connection', (socket) => {
     console.log('New User connected');
 
-    // socket.emit('newEmail', {
-    //     from: 'nick@postman.com',
-    //     text: 'Hey. What is going on.',
-    //     createdAt: 123
-    // });
 
-    // socket.emit('newMessage', {
-    //     from: 'nick',
-    //     text: 'Hey. What is going on.',
-    //     createdAt: 12345647586
-    //
-    // });
 
-    // socket.on('createEmail', (newEmail) => {
-    //     console.log('createEmail', newEmail);
-    // });
+    socket.emit('newMessage', {
+        from: "Admin",
+        text: "Welcome to the channel",
+        createdAt: new Date().getTime()
+    });
+
+    socket.broadcast.emit('newMessage', {
+        from: "Admin",
+        text: "A New user has joined the channel",
+        createdAt: new Date().getTime()
+    });
 
     socket.on('createMessage', (message) => {
         console.log('createMessage', message);
@@ -55,6 +52,12 @@ io.on('connection', (socket) => {
             text: message.text,
             createdAt: new Date().getTime()
         })
+
+        // socket.broadcast.emit('newMessage', {
+        //         from: message.from,
+        //         text: message.text,
+        //         createdAt: new Date().getTime()
+        //     })
     });
 
     socket.on('disconnect', () => {
